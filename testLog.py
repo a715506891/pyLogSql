@@ -1,17 +1,7 @@
 import datetime
 import socket  # ip转换模块
 import struct  # ip转换模块
-import logging  # 日志加载
 import pymysql
-# from tqdm import *
-# 跳转，跳出
-# 日志格式
-logging.basicConfig(level=logging.DEBUG,  # level,最低显示什么等级的错误，需用大写
-                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
-                    datefmt='%a, %d %b %Y %H:%M:%S',  # 时间格式
-                    # filename='e:\\data\\test.log',  #储存文件位置及文件名格式
-                    # filemode='w'#读取方式
-                    )
 # 文件加载
 file_name = 'C:/Users/Administrator/Desktop/access_www_20170718.log'
 file = open(file_name, 'r')
