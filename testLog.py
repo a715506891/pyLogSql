@@ -2,7 +2,6 @@ import datetime
 import socket  # ip转换模块
 import struct  # ip转换模块
 import pymysql
-# 文件加载
 file_name = 'C:/Users/Administrator/Desktop/access_www_20170718.log'
 file = open(file_name, 'r')
 list_a = [a.split('|') for a in file]  # 按照|分类出来
@@ -11,7 +10,33 @@ sortLs = sorted(list_a, key=lambda x: (socket.ntohl(struct.unpack(
 lenLs = len(sortLs)  # 文件长度
 # 提出数据并整理格式
 sortLsIp = [ip[0] for ip in sortLs]  # ip存储
-sortLsUrl = [Url[5] for Url in sortLs]  # URL存储
+sortLsUrl = [Url[5] for Url in sortLs]  # URL存储\
+
+# url分级处理
+UrlBigList = []  # 所有拆分连接的存储表
+
+
+def tiqu_lianjie(Url, numLeve):  # 提取所有连接段,以及需要的连接段数
+    UrlSmallList = [''] * numLeve  # 每一个拆分连接的存储表
+    protocol, *urlList = Url.split('//')  # 先区分开协议模式
+    if urlList != []:  # 如果存在域名
+        UrlSmallList[0] = protocol  # 第一个存储协议
+        idx = 1  # 连接内容从第一个开始存储
+        for x in urlList[0].split('/'):
+            if idx < numLeve:  # 只存储规定的等级目录
+                UrlSmallList[idx] = x
+                idx += 1
+        return(UrlSmallList)
+    else:
+        UrlSmallList[0] = protocol  # 第一个存储协议
+        return (UrlSmallList)
+
+
+for UrlCat in sortLsUrl:
+    UrlBigList.append(tiqu_lianjie(UrlCat, 6))
+
+
+sortLsUrlGp = [Gp[2] for Gp in sortLs]  # 获取传输存储
 sortLsTime = [datetime.datetime.strptime(
     Time[1], "%d/%b/%Y:%H:%M:%S +0800") for Time in sortLs]  # 浏览时间时间
 # 处理时间差及浏览状态
@@ -121,9 +146,11 @@ db = pymysql.connect("localhost", "root", "a10898918511", "logging")
 # 使用cursor()方法获取操作游标
 cursor = db.cursor()
 
-sql = 'INSERT INTO loggingm (logip, logtime, url, timediff,status,tiaoru,tiaochu) VALUES (%s,%s,%s,%s,%s,%s,%s)'
+sql = 'INSERT INTO loggingm (logip, logtime, url,url1,url2,url3,url4,url5, gp, timediff,status,tiaoru,tiaochu) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
 args = [(str(sortLsIp[k]), str(sortLsTime[k].strftime("%Y-%m-%d %H:%M:%S")),
-         str(sortLsUrl[k]), str(timeLs[k]), str(status[k]), str(tiaoru[k]), str(tiaochu[k]))for k in range(0, lenLs)]
+         str(sortLsUrl[k]), str(UrlBigList[k][0]), str(UrlBigList[k][1]), str(UrlBigList[k][2]), str(
+             UrlBigList[k][3]), str(UrlBigList[k][4]), str(sortLsUrlGp[k]), str(timeLs[k]),
+         str(status[k]), str(tiaoru[k]), str(tiaochu[k])) for k in range(0, lenLs)]
 try:
     cursor.executemany(sql, args)
 except Exception as e:
