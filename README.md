@@ -11,3 +11,7 @@
 开启远程链接权限
 ***
 
+
+# [数据分组.sql](https://github.com/a715506891/pyLogSql/blob/master/%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8B%E9%93%BE%E6%8E%A5%E6%9D%83%E9%99%90.sql)
+数据分组
+***
