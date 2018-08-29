@@ -2,7 +2,7 @@ import datetime
 import socket  # ip转换模块
 import struct  # ip转换模块
 import pymysql
-file_name = 'C:/Users/Administrator/Desktop/access_www_20170718.log'
+file_name = 'C:/Users/Administrator/Desktop/0718.log'
 file = open(file_name, 'r')
 list_a = [a.split('|') for a in file]  # 按照|分类出来
 sortLs = sorted(list_a, key=lambda x: (socket.ntohl(struct.unpack(
@@ -142,7 +142,7 @@ else:  # 与下一个ip不相等 即为5 进入并最后跳出，无跳入链接
     tiaochu.append('')
 # 插入数据
 # 打开数据库连接
-db = pymysql.connect("localhost", "root", "a10898918511", "logging")
+db = pymysql.connect("localhost", "ro", "8511", "loging")
 # 使用cursor()方法获取操作游标
 cursor = db.cursor()
 
