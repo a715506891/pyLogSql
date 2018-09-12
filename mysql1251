@@ -1,0 +1,3 @@
+#再mysql命令窗口输入
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'yourpassword';
